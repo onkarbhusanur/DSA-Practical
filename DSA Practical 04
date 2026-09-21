@@ -1,0 +1,170 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef struct student {
+    char name[50];
+    int RN;
+    float cgpa;
+} student;
+
+// 1. Create / Add Records
+void insert(student s[], int *n) {
+    if (*n >= 100) {
+        printf("Database is full!\n");
+        return;
+    }
+
+    printf("Enter Roll no: ");
+    scanf("%d", &s[*n].RN);
+
+    printf("Enter Name: ");
+    scanf(" %[^\n]s", s[*n].name); // Reads string with spaces
+
+    printf("Enter CGPA: ");
+    scanf("%f", &s[*n].cgpa);
+
+    (*n)++;
+    printf("Student added successfully!\n");
+}
+
+// 2. Display All Records
+void display(student s[], int n) {
+    if (n == 0) {
+        printf("\nDatabase is empty!\n");
+        return;
+    }
+
+    printf("\n--------------- STUDENT DATABASE ---------------\n");
+    printf("%-10s %-25s %-10s\n", "Roll No.", "Name", "CGPA");
+    printf("-------------------------------------------------\n");
+
+    for (int i = 0; i < n; i++) {
+        printf("%-10d %-25s %-10.2f\n", s[i].RN, s[i].name, s[i].cgpa);
+    }
+}
+
+// 3. Modify Record
+void modify(student s[], int n) {
+    if (n == 0) {
+        printf("\nDatabase is empty!\n");
+        return;
+    }
+
+    int rn, found = 0;
+    printf("Enter Roll No to modify: ");
+    scanf("%d", &rn);
+
+    for (int i = 0; i < n; i++) {
+        if (s[i].RN == rn) {
+            found = 1;
+            printf("\nRecord found! Enter new details:\n");
+
+            printf("Enter New Name: ");
+            scanf(" %[^\n]s", s[i].name);
+
+            printf("Enter New CGPA: ");
+            scanf("%f", &s[i].cgpa);
+
+            printf("Student record updated successfully!\n");
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Student with Roll No %d not found!\n", rn);
+    }
+}
+
+// 4. Search Record (Linear Search)
+void search(student s[], int n) {
+    if (n == 0) {
+        printf("\nDatabase is empty!\n");
+        return;
+    }
+
+    int rn, found = 0;
+    printf("Enter Roll No to search: ");
+    scanf("%d", &rn);
+
+    for (int i = 0; i < n; i++) {
+        if (s[i].RN == rn) {
+            found = 1;
+            printf("\nStudent Record Found:\n");
+            printf("Roll No: %d\n", s[i].RN);
+            printf("Name:    %s\n", s[i].name);
+            printf("CGPA:    %.2f\n", s[i].cgpa);
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Student with Roll No %d not found!\n", rn);
+    }
+}
+
+// 5. Sort Records (Bubble Sort by Roll No)
+void sort(student s[], int n) {
+    if (n < 2) {
+        printf("\nNot enough records to sort!\n");
+        return;
+    }
+
+    student temp;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (s[j].RN > s[j + 1].RN) {
+                // Swap whole structures
+                temp = s[j];
+                s[j] = s[j + 1];
+                s[j + 1] = temp;
+            }
+        }
+    }
+
+    printf("\nDatabase sorted successfully by Roll No (Ascending)!\n");
+}
+
+int main() {
+    student s[100];
+    int n = 0;
+    int choice;
+
+    while (1) {
+        printf("\n========== STUDENT DATABASE ==========\n");
+        printf("1. Create / Insert Student\n");
+        printf("2. Display All Students\n");
+        printf("3. Modify Student Record\n");
+        printf("4. Search Student\n");
+        printf("5. Sort Students (by Roll No)\n");
+        printf("6. Exit\n");
+
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                insert(s, &n);
+                break;
+            case 2:
+                display(s, n);
+                break;
+            case 3:
+                modify(s, n);
+                break;
+            case 4:
+                search(s, n);
+                break;
+            case 5:
+                sort(s, n);
+                break;
+            case 6:
+                printf("Exiting program...\n");
+                return 0;
+            default:
+                printf("Invalid choice! Try again.\n");
+        }
+    }
+
+    return 0;
+}
+
