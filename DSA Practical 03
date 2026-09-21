@@ -1,0 +1,159 @@
+#include <stdio.h>
+
+// Helper function to print an array
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+// Helper function to swap two elements
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// 1. BUBBLE SORT
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                swap(&arr[j], &arr[j + 1]);
+            }
+        }
+    }
+}
+
+// 2. SELECTION SORT
+void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_idx]) {
+                min_idx = j;
+            }
+        }
+        swap(&arr[min_idx], &arr[i]);
+    }
+}
+
+// 3. INSERTION SORT
+void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+// 4. QUICK SORT (Helper: Partition)
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high]; 
+    int i = (low - 1); 
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+// 4. QUICK SORT
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+// 5. MERGE SORT (Helper: Merge)
+void merge(int arr[], int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+
+    int L[n1], R[n2];
+
+    for (int i = 0; i < n1; i++) L[i] = arr[l + i];
+    for (int j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
+
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+// 5. MERGE SORT
+void mergeSort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+// MAIN FUNCTION TO RUN ALL ALGORITHMS
+int main() {
+    int n = 5;
+
+    // Test Bubble Sort
+    int arr1[] = {5, 3, 1, 4, 2};
+    bubbleSort(arr1, n);
+    printf("Bubble Sort result:    ");
+    printArray(arr1, n);
+
+    // Test Selection Sort
+    int arr2[] = {5, 3, 1, 4, 2};
+    selectionSort(arr2, n);
+    printf("Selection Sort result: ");
+    printArray(arr2, n);
+
+    // Test Insertion Sort
+    int arr3[] = {5, 3, 1, 4, 2};
+    insertionSort(arr3, n);
+    printf("Insertion Sort result: ");
+    printArray(arr3, n);
+
+    // Test Quick Sort
+    int arr4[] = {5, 3, 1, 4, 2};
+    quickSort(arr4, 0, n - 1);
+    printf("Quick Sort result:     ");
+    printArray(arr4, n);
+
+    // Test Merge Sort
+    int arr5[] = {5, 3, 1, 4, 2};
+    mergeSort(arr5, 0, n - 1);
+    printf("Merge Sort result:     ");
+    printArray(arr5, n);
+
+    return 0;
+}
